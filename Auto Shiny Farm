@@ -4,7 +4,6 @@ local BP = plr:WaitForChild("Backpack")
 local PlrStats = plr:WaitForChild("PlayerStats")
 local Stand = PlrStats:WaitForChild("Stand")
 local vim = game:GetService("VirtualInputManager")
-local url = "https://discord.com/api/webhooks/1269871147122561108/Bg_UJma9Tg0Xzc1C6apKUzDhS3xXykoj1kDhfGm4C-ek0E4zVEkzuIZP10Vl8BMKXGp_"
 
 local teleport_table = {
     location1 = Vector3.new(-246, 284, 308), -- your desired position
@@ -159,10 +158,10 @@ function Arrow()
         }
 
         if ShinyP == "Yes" then
-            SendMessage(url, "@everyone")
+            SendMessage(getgenv().webhook, "@everyone")
         end
 
-        SendMessageEMBED(url, embed)
+        SendMessageEMBED(getgenv().webhook, embed)
 
         -- Notification
         local Notifications = loadstring(game:HttpGet("https://raw.githubusercontent.com/tacolift/notification-library/main/library.lua"))()

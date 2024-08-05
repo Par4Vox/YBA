@@ -4,24 +4,7 @@ local BP = plr:WaitForChild("Backpack")
 local PlrStats = plr:WaitForChild("PlayerStats")
 local Stand = PlrStats:WaitForChild("Stand")
 local vim = game:GetService("VirtualInputManager")
-
-local teleport_table = {
-    location1 = Vector3.new(-246, 284, 308), -- your desired position
-}
-
-local tween_s = game:GetService('TweenService')
-local tweeninfo = TweenInfo.new(7,Enum.EasingStyle.Linear)
-
-local lp = game.Players.LocalPlayer
-
-function bypass_teleport(v)
-    if lp.Character and 
-    lp.Character:FindFirstChild('HumanoidRootPart') then
-        local cf = CFrame.new(v)
-        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
-        a:Play()
-    end
-end
+loadstring(game:HttpGet("https://raw.githubusercontent.com/zakater5/LuaRepo/main/YBA/v3.lua"))()
 
 function SendMessage(url, message)
     local http = game:GetService("HttpService")
@@ -84,6 +67,7 @@ function Roka()
     if arrow then
         plr.Character:WaitForChild("Humanoid"):EquipTool(arrow) -- Equip the tool
         arrow:Activate()
+        workspace.Living[plr.Name]:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-246, 284, 308)
         task.wait(0.7)
         vim:SendMouseButtonEvent(0, 0, 0, true, game, 1) task.wait() vim:SendMouseButtonEvent(0, 0, 0, false, game, 1)
         
@@ -106,6 +90,7 @@ function Arrow()
     if arrow then
         workspace.Living[plr.Name]:WaitForChild("Humanoid"):EquipTool(arrow) -- Equip the tool     
         arrow:Activate()
+        workspace.Living[plr.Name]:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-246, 284, 308)
         task.wait(0.7)
         vim:SendMouseButtonEvent(0, 0, 0, true, game, 1) task.wait() vim:SendMouseButtonEvent(0, 0, 0, false, game, 1)
         

@@ -4,7 +4,8 @@ local BP = plr:WaitForChild("Backpack")
 local PlrStats = plr:WaitForChild("PlayerStats")
 local Stand = PlrStats:WaitForChild("Stand")
 local vim = game:GetService("VirtualInputManager")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/zakater5/LuaRepo/main/YBA/v3.lua"))()
+
+
 
 function SendMessage(url, message)
     local http = game:GetService("HttpService")
@@ -64,7 +65,14 @@ end
 
 function Roka()
     local arrow = BP:FindFirstChild("Rokakaka") -- Find the tool instance
+    local gui = plr.PlayerGui
+    local Main = gui:WaitForChild("HUD"):WaitForChild("Main")
+    local Stands = Main.Frames:WaitForChild("Stands")
+    local ScrollingFrame = Stands:WaitForChild("ScrollingFrame")
+    local Equipped = ScrollingFrame:WaitForChild("Equipped")
+
     if arrow then
+        if not Equipped:FindFirstChild("Shiny") then
         plr.Character:WaitForChild("Humanoid"):EquipTool(arrow) -- Equip the tool
         arrow:Activate()
         workspace.Living[plr.Name]:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-246, 284, 308)
@@ -81,13 +89,22 @@ function Roka()
         warn("Rokakaka not found in the backpack")
     end
 end
+end
 
 function Arrow()
     -- Redefine variables after using Rokakaka
     BP = plr:WaitForChild("Backpack")
+    local gui = plr.PlayerGui
+    local Main = gui:WaitForChild("HUD"):WaitForChild("Main")
+    local Stands = Main.Frames:WaitForChild("Stands")
+    local ScrollingFrame = Stands:WaitForChild("ScrollingFrame")
+    local Equipped = ScrollingFrame:WaitForChild("Equipped")
+
 
     local arrow = BP:FindFirstChild("Mysterious Arrow") -- Find the tool instance
     if arrow then
+        if not Equipped:FindFirstChild("Shiny") then
+
         workspace.Living[plr.Name]:WaitForChild("Humanoid"):EquipTool(arrow) -- Equip the tool     
         arrow:Activate()
         workspace.Living[plr.Name]:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-246, 284, 308)
@@ -157,6 +174,7 @@ function Arrow()
         warn("Mysterious Arrow not found in the backpack")
     end
 end
+end
 
 -- Execute Roka function
 local gui = plr.PlayerGui
@@ -165,11 +183,17 @@ local Stands = Main.Frames:WaitForChild("Stands")
 local ScrollingFrame = Stands:WaitForChild("ScrollingFrame")
 local Equipped = ScrollingFrame:WaitForChild("Equipped")
 
-while not Equipped:FindFirstChild("Shiny") or getgenv().Farm == true do
+while getgenv().Farm == true do
+    if Equipped:FindFirstChild("Shiny") then
+        break
+    end
     if Stand.Value == "None" then
         StatPoints()
         task.wait(1)
         Arrow()
+        if Equipped:FindFirstChild("Shiny") then
+            break
+        end
     else
         Roka()
         task.wait(5)
@@ -182,5 +206,11 @@ while not Equipped:FindFirstChild("Shiny") or getgenv().Farm == true do
     
         -- Execute Arrow function
         Arrow()
+        if Equipped:FindFirstChild("Shiny") then
+            break
+        end
+    end
+    if Equipped:FindFirstChild("Shiny") then
+        break
     end
 end

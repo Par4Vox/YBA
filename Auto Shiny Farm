@@ -161,9 +161,9 @@ function Arrow()
 
         if ShinyP == "Yes" then
             SendMessage(getgenv().webhook, "@everyone")
+            SendMessageEMBED(getgenv().webhook, embed)
         end
 
-        SendMessageEMBED(getgenv().webhook, embed)
 
         -- Notification
         local Notifications = loadstring(game:HttpGet("https://raw.githubusercontent.com/tacolift/notification-library/main/library.lua"))()

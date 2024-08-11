@@ -15,17 +15,6 @@ local HRP = Character.PrimaryPart
 local part
 local dontTPOnDeath = true
 
-game:GetService("CoreGui").DescendantAdded:Connect(function(child)
-    if child.Name == "ErrorPrompt" then
-        local GrabError = child:FindFirstChild("ErrorMessage",true)
-        repeat task.wait() until GrabError.Text ~= "Label"
-        local Reason = GrabError.Text
-        if Reason:match("kick") or Reason:match("You") or Reason:match("conn") or Reason:match("rejoin") then
-            game:GetService("TeleportService"):Teleport(2809202155, game:GetService("Players").LocalPlayer)
-        end
-    end
-end)
-
 if not LocalPlayer.PlayerGui:FindFirstChild("HUD") then
     print("I FOUND IT")
     local HUD = game:GetService("ReplicatedStorage").Objects.HUD:Clone()
@@ -313,4 +302,5 @@ if countItems("Rokakaka") >= getgenv().MaxRoka and countItems("Mysterious Arrow"
 else
     farmItem("Rokakaka", getgenv().MaxRoka)
     farmItem("Mysterious Arrow", getgenv().MaxArrow)
+    hop()
 end

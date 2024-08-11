@@ -231,6 +231,7 @@ local function countItems(itemName)
     return itemAmount
 end
 
+
 --uses item, use amount to specify what worthiness
 local function useItem(aItem, amount)
     local item = LocalPlayer.Backpack:WaitForChild(aItem, 5)
@@ -255,6 +256,8 @@ end
 local function attemptStandFarm()
     LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(500, 2010, 500)
     
+    task.wait(1)
+
     if LocalPlayer.PlayerStats.Stand.Value == "None" then
         print("DEBUG CHECK, USING MYSTERIOUS ARROW")
         useItem("Mysterious Arrow", "II")

@@ -19,12 +19,6 @@ local HRP = Character.PrimaryPart
 local part
 local dontTPOnDeath = true
 
-function click(btn)
-    for _,connection in pairs(getconnections(btn.MouseButton1Click)) do
-        connection:Fire()
-    end
-end
-
 if LocalPlayer.PlayerStats.Level.Value == 50 then while true do print("Level 50, Auto pres disabled") task.wait(9999999) end end
 
 if not LocalPlayer.PlayerGui:FindFirstChild("HUD") then
@@ -249,11 +243,11 @@ local function useItem(aItem, amount)
         LocalPlayer.Character.Humanoid:EquipTool(item)
         LocalPlayer.Character:WaitForChild("RemoteFunction"):InvokeServer("LearnSkill",{["Skill"] = "Worthiness ".. amount,["SkillTreeType"] = "Character"})
         repeat item:Activate() task.wait() until LocalPlayer.PlayerGui:FindFirstChild("DialogueGui")
-        click(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue)
-        click(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.Options:WaitForChild("Option1").TextButton)
-        click(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue)
+        firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
+        firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.Options:WaitForChild("Option1").TextButton.MouseButton1Click)
+        firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
 		repeat task.wait() until LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.DialogueFrame.Frame.Line001.Container.Group001.Text == "You"
-		click(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue)
+		firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
     end
 end
 
@@ -261,8 +255,6 @@ end
 local function attemptStandFarm()
     LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(500, 2010, 500)
     
-    task.wait(1)
-
     if LocalPlayer.PlayerStats.Stand.Value == "None" then
         print("DEBUG CHECK, USING MYSTERIOUS ARROW")
         useItem("Mysterious Arrow", "II")
@@ -322,10 +314,10 @@ local function getitem(item, itemIndex)
             if button:FindFirstChild("Part") then
                 if button:IsA("ImageButton") and button:WaitForChild("Part").TextColor3 == Color3.new(0, 1, 0) then
                     repeat
-                        click(button)
-                        click(button)
-                        click(button)
-                        click(button)
+                        firesignal(button.MouseEnter)
+                        firesignal(button.MouseButton1Up)
+                        firesignal(button.MouseButton1Click)
+                        firesignal(button.Activated)
                         task.wait()
                     until not LocalPlayer.PlayerGui:FindFirstChild("ScreenGui")
                 end

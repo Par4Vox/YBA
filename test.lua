@@ -2,6 +2,9 @@ getgenv().waitUntilCollect = 0.5 --Change this if ur getting kicked a lot
 getgenv().sortOrder = "Asc" --desc for less players, asc for more
 getgenv().lessPing = false --turn this on if u want lower ping servers, cant guarantee you will see same people using script, and data error 1
 
+getgenv().MaxRoka = 25
+getgenv().MaxArrow = 25
+
 local LocalPlayer = game.Players.LocalPlayer
 local Character = LocalPlayer.Character
 repeat task.wait() until Character:FindFirstChild("RemoteEvent") and Character:FindFirstChild("RemoteFunction")
@@ -246,5 +249,5 @@ local function farmItem(itemName, amount)
     return true
 end
 
-farmItem("Rokakaka", 25)
-farmItem("Mysterious Arrow", 25)
+farmItem("Rokakaka", getgenv().MaxRoka)
+farmItem("Mysterious Arrow", getgenv().MaxArrow)

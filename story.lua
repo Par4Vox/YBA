@@ -19,6 +19,12 @@ local HRP = Character.PrimaryPart
 local part
 local dontTPOnDeath = true
 
+function click(btn)
+    for _,connection in pairs(getconnections(btn.MouseButton1Click)) do
+        connection:Fire()
+    end
+end
+
 if LocalPlayer.PlayerStats.Level.Value == 50 then while true do print("Level 50, Auto pres disabled") task.wait(9999999) end end
 
 if not LocalPlayer.PlayerGui:FindFirstChild("HUD") then
@@ -231,7 +237,6 @@ local function countItems(itemName)
     return itemAmount
 end
 
-
 --uses item, use amount to specify what worthiness
 local function useItem(aItem, amount)
     local item = LocalPlayer.Backpack:WaitForChild(aItem, 5)
@@ -244,11 +249,11 @@ local function useItem(aItem, amount)
         LocalPlayer.Character.Humanoid:EquipTool(item)
         LocalPlayer.Character:WaitForChild("RemoteFunction"):InvokeServer("LearnSkill",{["Skill"] = "Worthiness ".. amount,["SkillTreeType"] = "Character"})
         repeat item:Activate() task.wait() until LocalPlayer.PlayerGui:FindFirstChild("DialogueGui")
-        firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
-        firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.Options:WaitForChild("Option1").TextButton.MouseButton1Click)
-        firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
+        click(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue)
+        click(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.Options:WaitForChild("Option1").TextButton)
+        click(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue)
 		repeat task.wait() until LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.DialogueFrame.Frame.Line001.Container.Group001.Text == "You"
-		firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
+		click(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue)
     end
 end
 
@@ -317,10 +322,10 @@ local function getitem(item, itemIndex)
             if button:FindFirstChild("Part") then
                 if button:IsA("ImageButton") and button:WaitForChild("Part").TextColor3 == Color3.new(0, 1, 0) then
                     repeat
-                        firesignal(button.MouseEnter)
-                        firesignal(button.MouseButton1Up)
-                        firesignal(button.MouseButton1Click)
-                        firesignal(button.Activated)
+                        click(button)
+                        click(button)
+                        click(button)
+                        click(button)
                         task.wait()
                     until not LocalPlayer.PlayerGui:FindFirstChild("ScreenGui")
                 end

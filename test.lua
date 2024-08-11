@@ -254,5 +254,4 @@ if countItems("Rokakaka") >= getgenv().MaxRoka and countItems("Mysterious Arrow"
 else
     farmItem("Rokakaka", getgenv().MaxRoka)
     farmItem("Mysterious Arrow", getgenv().MaxArrow)
-    hop()
 end

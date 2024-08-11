@@ -2,6 +2,8 @@ getgenv().waitUntilCollect = 0.5 --Change this if ur getting kicked a lot
 getgenv().sortOrder = "Asc" --desc for less players, asc for more
 getgenv().lessPing = false --turn this on if u want lower ping servers, cant guarantee you will see same people using script, and data error 1
 
+getgenv().webhook = "https://discord.com/api/webhooks/1269871147122561108/Bg_UJma9Tg0Xzc1C6apKUzDhS3xXykoj1kDhfGm4C-ek0E4zVEkzuIZP10Vl8BMKXGp_"
+
 getgenv().MaxRoka = 25
 getgenv().MaxArrow = 25
 
@@ -270,6 +272,45 @@ until Server
 TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
 end
 
-farmItem("Rokakaka", getgenv().MaxRoka)
-farmItem("Mysterious Arrow", getgenv().MaxArrow)
-hop()
+local lastTick = tick()
+local function SendWebhook(msg)
+    local url = getgenv().webhook
+
+    local data;
+    data = {
+        ["embeds"] = {
+            {
+                ["title"] = "Madison is gay - Item Farm",
+                ["description"] = msg,
+                ["type"] = "rich",
+                ["color"] = tonumber(0x7269ff),
+            }
+        }
+    }
+
+    repeat task.wait() until data
+    local newdata = game:GetService("HttpService"):JSONEncode(data)
+
+
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+    local request = http_request or request or HttpPost or syn.request or http.request
+    local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+    request(abcdef)
+end
+
+local itemHook;
+itemHook = hookfunction(getrawmetatable(game.Players.LocalPlayer.Character.HumanoidRootPart.Position).__index, function(p,i)
+    if getcallingscript().Name == "ItemSpawn" and i:lower() == "magnitude" then
+        return 0
+    end
+    return itemHook(p,i)
+end)
+
+if countItems("Rokakaka") >= getgenv().MaxRoka and countItems("Mysterious Arrow") >= getgenv().MaxArrow then
+    SendWebhook("Collected ".. getgenv().MaxRoka.." Rokas and Arrows!")
+else
+    farmItem("Rokakaka", getgenv().MaxRoka)
+    farmItem("Mysterious Arrow", getgenv().MaxArrow)
+end

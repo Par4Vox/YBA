@@ -251,3 +251,4 @@ end
 
 farmItem("Rokakaka", getgenv().MaxRoka)
 farmItem("Mysterious Arrow", getgenv().MaxArrow)
+TPReturner()

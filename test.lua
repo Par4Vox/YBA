@@ -4,8 +4,8 @@ getgenv().lessPing = false --turn this on if u want lower ping servers, cant gua
 
 getgenv().webhook = "https://discord.com/api/webhooks/1269871147122561108/Bg_UJma9Tg0Xzc1C6apKUzDhS3xXykoj1kDhfGm4C-ek0E4zVEkzuIZP10Vl8BMKXGp_"
 
-getgenv().MaxRoka = 25
-getgenv().MaxArrow = 25
+getgenv().MaxRoka = 50
+getgenv().MaxArrow = 50
 
 local LocalPlayer = game.Players.LocalPlayer
 local Character = LocalPlayer.Character
@@ -230,9 +230,3 @@ else
     farmItem("Rokakaka", getgenv().MaxRoka)
     farmItem("Mysterious Arrow", getgenv().MaxArrow)
 end
-
-game.Players.LocalPlayer.Backpack.ChildAdded:Connect(function(child)
-    if countItems("Rokakaka") >= getgenv().MaxRoka and countItems("Mysterious Arrow") >= getgenv().MaxArrow then
-        SendWebhook("Collected ".. getgenv().MaxRoka.." Rokas and Arrows!")
-    end
-end)

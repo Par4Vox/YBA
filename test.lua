@@ -230,3 +230,9 @@ else
     farmItem("Rokakaka", getgenv().MaxRoka)
     farmItem("Mysterious Arrow", getgenv().MaxArrow)
 end
+
+game.Players.LocalPlayer.Backpack.ChildAdded:Connect(function(child)
+    if countItems("Rokakaka") >= getgenv().MaxRoka and countItems("Mysterious Arrow") >= getgenv().MaxArrow then
+        SendWebhook("Collected ".. getgenv().MaxRoka.." Rokas and Arrows!")
+    end
+end)

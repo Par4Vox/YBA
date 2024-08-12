@@ -35,15 +35,6 @@ if LocalPlayer.PlayerGui:FindFirstChild("LoadingScreen") then
     LocalPlayer.PlayerGui:FindFirstChild("LoadingScreen"):Destroy()
 end
 
-task.spawn(function()
-    if game.Lighting:WaitForChild("DepthOfField", 10) then
-        game.Lighting.DepthOfField:Destroy()
-    end
-end)
-
-workspace.Map.IMPORTANT.OceanFloor.OceanFloor_Sand_6.Size = Vector3.new(2048, 89, 2048)
-workspace.Map.IMPORTANT.OceanFloor.OceanFloor_Sand_4.Size = Vector3.new(2048, 89, 2048)
-
 local function SendWebhook(msg)
     local url = getgenv().webhook
 
@@ -99,22 +90,30 @@ part.Anchored = true
 part.Size = Vector3.new(25,1,25)
 part.Position = Vector3.new(500, 2000, 500)
 
+function ClickBTN(BTN)
+    for _,connection in pairs(getconnections(BTN.MouseButton1Click)) do
+        connection:Fire()
+    end
+end
+
 local function useItem(aItem, amount)
     local item = LocalPlayer.Backpack:WaitForChild(aItem, 5)
-
-    if not item then
-        Teleport()
-    end
 
     if amount then
         LocalPlayer.Character.Humanoid:EquipTool(item)
         LocalPlayer.Character:WaitForChild("RemoteFunction"):InvokeServer("LearnSkill",{["Skill"] = "Worthiness ".. amount,["SkillTreeType"] = "Character"})
-        repeat item:Activate() task.wait() until LocalPlayer.PlayerGui:FindFirstChild("DialogueGui")
+        item:Activate()
+
+        repeat task.wait() until LocalPlayer.PlayerGui:FindFirstChild("DialogueGui")
         firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
+        task.wait()
         firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.Options:WaitForChild("Option1").TextButton.MouseButton1Click)
+        task.wait()
         firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
+        task.wait()
 		repeat task.wait() until LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.DialogueFrame.Frame.Line001.Container.Group001.Text == "You"
 		firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
+        task.wait()
     end
 end
 local Main = LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("Main")

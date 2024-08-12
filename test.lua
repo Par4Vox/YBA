@@ -35,15 +35,6 @@ if LocalPlayer.PlayerGui:FindFirstChild("LoadingScreen") then
     LocalPlayer.PlayerGui:FindFirstChild("LoadingScreen"):Destroy()
 end
 
-task.spawn(function()
-    if game.Lighting:WaitForChild("DepthOfField", 10) then
-        game.Lighting.DepthOfField:Destroy()
-    end
-end)
-
-workspace.Map.IMPORTANT.OceanFloor.OceanFloor_Sand_6.Size = Vector3.new(2048, 89, 2048)
-workspace.Map.IMPORTANT.OceanFloor.OceanFloor_Sand_4.Size = Vector3.new(2048, 89, 2048)
-
 local function SendWebhook(msg)
     local url = getgenv().webhook
 

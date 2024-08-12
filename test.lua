@@ -1,11 +1,15 @@
-getgenv().waitUntilCollect = 0.5 --Change this if ur getting kicked a lot
+getgenv().standList =  {
+    ["The World"] = true,
+    ["Star Platinum"] = true,
+    ["Star Platinum: The World"] = true,
+    ["Crazy Diamond"] = true,
+    ["King Crimson"] = true,
+    ["King Crimson Requiem"] = true
+}
+
 getgenv().sortOrder = "Asc" --desc for less players, asc for more
 getgenv().lessPing = false --turn this on if u want lower ping servers, cant guarantee you will see same people using script, and data error 1
-
-getgenv().webhook = "https://discord.com/api/webhooks/1269871147122561108/Bg_UJma9Tg0Xzc1C6apKUzDhS3xXykoj1kDhfGm4C-ek0E4zVEkzuIZP10Vl8BMKXGp_"
-
-getgenv().MaxRoka = 50
-getgenv().MaxArrow = 50
+getgenv().webhook = "" --change this if u want to use ur own webhook
 
 local LocalPlayer = game.Players.LocalPlayer
 local Character = LocalPlayer.Character
@@ -13,7 +17,6 @@ repeat task.wait() until Character:FindFirstChild("RemoteEvent") and Character:F
 local RemoteFunction, RemoteEvent = Character.RemoteFunction, Character.RemoteEvent
 local HRP = Character.PrimaryPart
 local part
-local dontTPOnDeath = true
 
 if not LocalPlayer.PlayerGui:FindFirstChild("HUD") then
     print("I FOUND IT")
@@ -37,158 +40,10 @@ task.spawn(function()
         game.Lighting.DepthOfField:Destroy()
     end
 end)
-repeat task.wait() until game:IsLoaded() and game.Players.LocalPlayer and game.Players.LocalPlayer.Character
 
-local LocalPlayer = game.Players.LocalPlayer
-local Character = LocalPlayer.Character
-repeat task.wait() until Character:FindFirstChild("RemoteEvent") and Character:FindFirstChild("RemoteFunction")
-local RemoteFunction, RemoteEvent = Character.RemoteFunction, Character.RemoteEvent
-local HRP = Character.PrimaryPart
-local part
-local dontTPOnDeath = true
+workspace.Map.IMPORTANT.OceanFloor.OceanFloor_Sand_6.Size = Vector3.new(2048, 89, 2048)
+workspace.Map.IMPORTANT.OceanFloor.OceanFloor_Sand_4.Size = Vector3.new(2048, 89, 2048)
 
-local itemHook;
-itemHook = hookfunction(getrawmetatable(game.Players.LocalPlayer.Character.HumanoidRootPart.Position).__index, function(p,i)
-    if getcallingscript().Name == "ItemSpawn" and i:lower() == "magnitude" then
-        return 0
-    end
-    return itemHook(p,i)
-end)
-
-local Hook;
-Hook = hookmetamethod(game, '__namecall', newcclosure(function(self, ...)
-    local args = {...}
-    local namecallmethod =  getnamecallmethod()
-
-    if namecallmethod == "InvokeServer" then
-        if args[1] == "idklolbrah2de" then
-            return "  ___XP DE KEY"
-        end
-    end
-
-    return Hook(self, ...)
-end))
-
-
- local function findItem(itemName)
-    local ItemsDict = {
-        ["Position"] = {},
-        ["ProximityPrompt"] = {},
-        ["Items"] = {}
-    }
-
-    for _,item in pairs(game:GetService("Workspace")["Item_Spawns"].Items:GetChildren()) do
-        if item:FindFirstChild("MeshPart") and item.ProximityPrompt.ObjectText == itemName then
-            if item.ProximityPrompt.MaxActivationDistance == 8 then
-                table.insert(ItemsDict["Items"], item.ProximityPrompt.ObjectText)
-                table.insert(ItemsDict["ProximityPrompt"], item.ProximityPrompt)
-                table.insert(ItemsDict["Position"], item.MeshPart.CFrame)
-            else
-                print("FAKE?")
-            end
-        end
-    end
-    return ItemsDict
-end
-
---count amount of items for checking if full of item
-local function countItems(itemName)
-    local itemAmount = 0
-
-    for _,item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-        if item.Name == itemName then
-            itemAmount += 1;
-        end
-    end
-
-    print(itemAmount)
-    return itemAmount
-end
-
---teleport not to get caught
-local function getitem(item, itemIndex)
-    local gotItem = false
-    local timeout = 5.5
-
-    if Character:FindFirstChild("SummonedStand") then
-        if Character:FindFirstChild("SummonedStand").Value then
-            RemoteFunction:InvokeServer("ToggleStand", "Toggle")
-        end
-    end
-
-    LocalPlayer.Backpack.ChildAdded:Connect(function()
-        gotItem = true
-    end)
-    
-    task.spawn(function()
-        while not gotItem do
-            task.wait()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = item["Position"][itemIndex] - Vector3.new(0,10,0)
-        end
-    end)
-
-    task.wait(getgenv().waitUntilCollect)
-
-    task.spawn(function()
-        fireproximityprompt(item["ProximityPrompt"][itemIndex])
-        
-        local screenGui = LocalPlayer.PlayerGui:WaitForChild("ScreenGui",5)
-        
-        if not screenGui then
-            return
-        end
-
-        local screenGuiPart = screenGui:WaitForChild("Part")
-        for _, button in pairs(screenGuiPart:GetDescendants()) do
-            if button:FindFirstChild("Part") then
-                if button:IsA("ImageButton") and button:WaitForChild("Part").TextColor3 == Color3.new(0, 1, 0) then
-                    repeat
-                        firesignal(button.MouseEnter)
-                        firesignal(button.MouseButton1Up)
-                        firesignal(button.MouseButton1Click)
-                        firesignal(button.Activated)
-                        task.wait()
-                    until not LocalPlayer.PlayerGui:FindFirstChild("ScreenGui")
-                end
-            end
-        end
-    end)
-    
-    task.spawn(function()
-        for i=timeout, 1, -1 do
-            task.wait(1)
-        end
-
-        if not gotItem then
-            gotItem = true
-            return
-        end
-    end)
-
-
-    while not gotItem do
-        task.wait()
-    end
-end
-
---farm item with said name and amount
-local function farmItem(itemName, amount)
-    local items = findItem(itemName)
-    local amountFirst = countItems(itemName) == amount
-
-    for itemIndex, _ in pairs(items["Position"]) do
-        if countItems(itemName) == amount or amountFirst then
-            print("SUCCESSFULLY BROKE")
-            break
-        else
-            getitem(items, itemIndex)
-        end
-    end
-    
-    return true
-end
-
-local lastTick = tick()
 local function SendWebhook(msg)
     local url = getgenv().webhook
 
@@ -196,7 +51,7 @@ local function SendWebhook(msg)
     data = {
         ["embeds"] = {
             {
-                ["title"] = "Madison is gay - Item Farm",
+                ["title"] = "sigma hub - stand ferm",
                 ["description"] = msg,
                 ["type"] = "rich",
                 ["color"] = tonumber(0x7269ff),
@@ -224,9 +79,83 @@ itemHook = hookfunction(getrawmetatable(game.Players.LocalPlayer.Character.Human
     return itemHook(p,i)
 end)
 
-if countItems("Rokakaka") >= getgenv().MaxRoka and countItems("Mysterious Arrow") >= getgenv().MaxArrow then
-    SendWebhook("Collected ".. getgenv().MaxRoka.." Rokas and Arrows!")
-else
-    farmItem("Rokakaka", getgenv().MaxRoka)
-    farmItem("Mysterious Arrow", getgenv().MaxArrow)
+local Hook;
+Hook = hookmetamethod(game, '__namecall', newcclosure(function(self, ...)
+    local args = {...}
+    local namecallmethod =  getnamecallmethod()
+
+    if namecallmethod == "InvokeServer" then
+        if args[1] == "idklolbrah2de" then
+            return "  ___XP DE KEY"
+        end
+    end
+
+    return Hook(self, ...)
+end))
+
+part = Instance.new("Part")
+part.Parent = workspace
+part.Anchored = true
+part.Size = Vector3.new(25,1,25)
+part.Position = Vector3.new(500, 2000, 500)
+
+function ClickBTN(BTN)
+    for _,connection in pairs(getconnections(BTN.MouseButton1Click)) do
+        connection:Fire()
+    end
 end
+
+local function useItem(aItem, amount)
+    local item = LocalPlayer.Backpack:WaitForChild(aItem, 5)
+
+    if amount then
+        LocalPlayer.Character.Humanoid:EquipTool(item)
+        LocalPlayer.Character:WaitForChild("RemoteFunction"):InvokeServer("LearnSkill",{["Skill"] = "Worthiness ".. amount,["SkillTreeType"] = "Character"})
+        item:Activate()
+
+        repeat task.wait() until LocalPlayer.PlayerGui:FindFirstChild("DialogueGui")
+        firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
+        firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.Options:WaitForChild("Option1").TextButton.MouseButton1Click)
+        firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
+		repeat task.wait() until LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.DialogueFrame.Frame.Line001.Container.Group001.Text == "You"
+		firesignal(LocalPlayer.PlayerGui:WaitForChild("DialogueGui").Frame.ClickContinue.MouseButton1Click)
+    end
+end
+local Main = LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("Main")
+local Stands = Main.Frames:WaitForChild("Stands")
+local ScrollingFrame = Stands:WaitForChild("ScrollingFrame")
+local Equipped = ScrollingFrame:WaitForChild("Equipped")
+
+--main function (entrypoint) of standfarm
+local function attemptStandFarm()
+    LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(500, 2010, 500)
+    
+    if LocalPlayer.PlayerStats.Stand.Value == "None" then
+        print("DEBUG CHECK, USING MYSTERIOUS ARROW")
+        useItem("Mysterious Arrow", "II")
+        repeat task.wait() until LocalPlayer.PlayerStats.Stand.Value ~= "None"
+
+        if not Equipped:FindFirstChild("Shiny") then
+            print("DEBUG CHECK, USING ROKAKAKA")
+            useItem("Rokakaka", "II")
+        elseif Equipped:FindFirstChild("Shiny") then
+            SendWebhook("Got `".. LocalPlayer.PlayerStats.Stand.Value .. "` stand")
+        end
+
+    elseif not Equipped:FindFirstChild("Shiny") then
+        print("DEBUG CHECK, USING ROKAKAKA TO CLEAR STAND")
+        useItem("Rokakaka", "II")
+    end
+end
+
+if not Equipped:FindFirstChild("Shiny") then
+    attemptStandFarm()
+end
+
+game.Workspace.Living.ChildAdded:Connect(function(character)
+    if character.Name == LocalPlayer.Name then
+        if not Equipped:FindFirstChild("Shiny") then
+            attemptStandFarm()
+        end
+    end
+end)
